@@ -21,8 +21,8 @@ type_t shader_uniform;
 
 [[spirv::push]]
 struct {
-  MatrixData* matrixData;
-  MaterialData* materialData;
+  const MatrixData* matrixData;
+  const MaterialData* materialData;
 } push;
 
 struct interpolants_t {
