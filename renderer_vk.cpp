@@ -168,22 +168,18 @@ private:
       }
       else if(bindingMode == BINDINGMODE_PUSHADDRESS)
       {
-        if(lastMatrix != di.matrixIndex)
+        if(lastMatrix != di.matrixIndex || lastMaterial != di.materialIndex)
         {
-          VkDeviceAddress address = matrixAddress + sizeof(CadScene::MatrixNode) * di.matrixIndex;
+          VkDeviceAddress addresses[] {
+            matrixAddress + sizeof(CadScene::MatrixNode) * di.matrixIndex,
+            materialAddress + sizeof(CadScene::Material) * di.materialIndex
+          };
 
-          vkCmdPushConstants(cmd, res->m_drawPush.getPipeLayout(), VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(VkDeviceAddress), &address);
+          vkCmdPushConstants(cmd, res->m_drawPush.getPipeLayout(), 
+            VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, 
+            sizeof(addresses), addresses);
 
           lastMatrix = di.matrixIndex;
-        }
-
-        if(lastMaterial != di.materialIndex)
-        {
-          VkDeviceAddress address = materialAddress + sizeof(CadScene::Material) * di.materialIndex;
-
-          vkCmdPushConstants(cmd, res->m_drawPush.getPipeLayout(), VK_SHADER_STAGE_FRAGMENT_BIT,
-                             sizeof(VkDeviceAddress), sizeof(VkDeviceAddress), &address);
-
           lastMaterial = di.materialIndex;
         }
       }

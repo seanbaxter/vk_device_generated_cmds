@@ -54,7 +54,7 @@ add_definitions(-DCSF_ZIP_SUPPORT=1)
 #####################################################################################
 # Source files for this project
 #
-file(GLOB SOURCE_FILES *.cpp *.hpp *.inl *.h *.c)
+file(GLOB SOURCE_FILES *.cpp *.hpp *.inl *.h *.c *.cxx)
 file(GLOB GLSL_FILES *.glsl)
 
 #####################################################################################
@@ -70,6 +70,11 @@ else()
 endif()
 
 add_executable(${EXENAME} ${SOURCE_FILES} ${COMMON_SOURCE_FILES} ${PACKAGE_SOURCE_FILES} ${GLSL_FILES})
+
+set_source_files_properties(shaders.cxx PROPERTIES COMPILE_FLAGS -shader)
+
+
+
 
 #####################################################################################
 # common source code needed for this sample
