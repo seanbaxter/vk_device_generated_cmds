@@ -83,16 +83,15 @@ source_group(shaders FILES
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
-if(UNIX)
-  set(UNIXLINKLIBS dl pthread)
-else()
-  set(UNIXLINKLIBS)
-endif()
+set(UNIXLINKLIBS dl pthread)
 
 #####################################################################################
 # Linkage
 #
-target_link_libraries(${EXENAME} ${PLATFORM_LIBRARIES}  shared_sources)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(${EXENAME} PRIVATE Threads::Threads)
+target_link_libraries(${EXENAME} ${PLATFORM_LIBRARIES}  shared_sources )
 
 foreach(DEBUGLIB ${LIBRARIES_DEBUG})
   target_link_libraries(${EXENAME} debug ${DEBUGLIB})
