@@ -96,7 +96,7 @@ void frag_shader() {
   // Apply shading.
   vec4 color = side.ambient + side.emissive;
 
-  // Apply stiple. 
+  // Apply stipple. 
   ivec2 pixel = ivec2(glfrag_FragCoord.xy);
   pixel /= (permutation % 8) + 1;
   pixel %= (permutation % 2) + 1;
