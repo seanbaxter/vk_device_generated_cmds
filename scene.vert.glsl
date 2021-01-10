@@ -48,11 +48,16 @@
   layout(buffer_reference, buffer_reference_align=16, scalar) readonly buffer MatrixBuffer {
     MatrixData  matrix;
   };
+  layout(buffer_reference, buffer_reference_align=16, scalar) readonly buffer MaterialBuffer {
+    MaterialData  material;
+  };
+  
 
   layout(push_constant, scalar) uniform pushConstants {
-    MatrixBuffer v;
+    MatrixBuffer matrix;
+    MaterialBuffer material;
   };
-  #define matrix v.matrix
+  #define matrix matrix.matrix
   
   layout(set=0, binding=DRAW_UBO_SCENE, scalar) uniform sceneBuffer {
     SceneData   scene;

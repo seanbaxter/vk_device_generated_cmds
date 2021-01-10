@@ -63,6 +63,25 @@
 //////////////////////////////////////////////////////////////////////////
 
 #ifdef __cplusplus
+
+enum BindingMode
+{
+  BINDINGMODE_DSETS,
+  BINDINGMODE_PUSHADDRESS,
+  NUM_BINDINGMODES,
+};
+
+struct shaders_t {
+  const char* spirv_data;
+  size_t spirv_size;
+
+  const char* comp_animation;
+  const char* vert[2];
+  const char* frags[2][128];
+};
+
+const extern shaders_t shaders;
+
 namespace generatedcmds {
   using namespace nvmath;
 #endif

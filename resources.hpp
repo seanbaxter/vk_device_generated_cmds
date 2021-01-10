@@ -44,13 +44,6 @@ using namespace nvmath;
 
 namespace generatedcmds {
 
-enum BindingMode
-{
-  BINDINGMODE_DSETS,
-  BINDINGMODE_PUSHADDRESS,
-  NUM_BINDINGMODES,
-};
-
 inline size_t alignedSize(size_t sz, size_t align)
 {
   return ((sz + align - 1) / align) * align;
