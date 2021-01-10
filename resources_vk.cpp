@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <imgui/imgui_impl_vk.h>
 #include <nvh/nvprint.hpp>
-
+#include <nvvk/shaders_vk.hpp>
 #include "resources_vk.hpp"
 
 namespace generatedcmds {
@@ -368,6 +368,12 @@ bool ResourcesVK::initPrograms(const std::string& path, const std::string& prepe
 
   m_animShading.shaderModuleID = m_shaderManager.createShaderModule(VK_SHADER_STAGE_COMPUTE_BIT, "animation.comp.glsl");
 
+  circle_module = nvvk::createShaderModule(
+    m_device, 
+    (const uint32_t*)shaders.spirv_data, 
+    shaders.spirv_size
+  );
+
   bool valid = m_shaderManager.areShaderModulesValid();
 
   if(valid)
@@ -403,6 +409,7 @@ void ResourcesVK::updatedPrograms()
 void ResourcesVK::deinitPrograms()
 {
   m_shaderManager.deinit();
+  vkDestroyShaderModule(m_device, circle_module, nullptr);
 }
 
 static VkSampleCountFlagBits getSampleCountFlagBits(int msaa)
@@ -828,8 +835,10 @@ void ResourcesVK::initPipes()
       m_gfxGen.setLayout(i == 0 ? m_drawBind.getPipeLayout() : m_drawPush.getPipeLayout());
 
       m_gfxGen.clearShaders();
-      m_gfxGen.addShader(m_drawShading[i].vertexShaders[m], VK_SHADER_STAGE_VERTEX_BIT);
-      m_gfxGen.addShader(m_drawShading[i].fragmentShaders[m], VK_SHADER_STAGE_FRAGMENT_BIT);
+      // m_gfxGen.addShader(m_drawShading[i].vertexShaders[m], VK_SHADER_STAGE_VERTEX_BIT);
+      m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_VERTEX_BIT, shaders.vert[i]);
+      // m_gfxGen.addShader(m_drawShading[i].fragmentShaders[m], VK_SHADER_STAGE_FRAGMENT_BIT);
+      m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_FRAGMENT_BIT, shaders.frag[i][m]);
 
       m_drawShading[i].pipelines[m] = m_gfxGen.createPipeline();
       assert(m_drawShading[i].pipelines[m] != VK_NULL_HANDLE);
@@ -842,8 +851,10 @@ void ResourcesVK::initPipes()
     VkComputePipelineCreateInfo     pipelineInfo = {VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     VkPipelineShaderStageCreateInfo stageInfo    = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
     stageInfo.stage                              = VK_SHADER_STAGE_COMPUTE_BIT;
-    stageInfo.pName                              = "main";
-    stageInfo.module                             = m_animShading.shader;
+    // stageInfo.pName                              = "main";
+    // stageInfo.module                             = m_animShading.shader;
+    stageInfo.pName                              = shaders.comp_animation;
+    stageInfo.module                             = circle_module;
 
     pipelineInfo.layout = m_anim.getPipeLayout();
     pipelineInfo.stage  = stageInfo;

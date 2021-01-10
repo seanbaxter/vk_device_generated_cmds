@@ -122,6 +122,8 @@ public:
     VkPipeline           pipelines[NUM_MATERIAL_SHADERS];
   } m_drawShading[NUM_BINDINGMODES];
 
+  VkShaderModule circle_module;
+
 
   bool                      m_withinFrame = false;
   nvvk::ShaderModuleManager m_shaderManager;

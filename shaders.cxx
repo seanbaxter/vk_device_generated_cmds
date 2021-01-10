@@ -149,7 +149,7 @@ void comp_animation() {
 
   float s = 1 - (float)gid / anim.numMatrices;
   float movement = 4;             // time until all objects done with moving (<= sequence*0.5)
-  float sequence = movement*2+3;  // time for sequence
+  float sequence = movement * 2 + 3;  // time for sequence
   
   float timeS = fract(anim.time / sequence) * sequence;
   float time  = 
@@ -162,8 +162,8 @@ void comp_animation() {
   vec3 pos  = matrixOrig[3].xyz;
   vec3 away = (pos - anim.sceneCenter);
   
-  float diridx = gid % 3;
-  float sidx   = gid % 6;
+  int diridx = gid % 3;
+  int sidx   = gid % 6;
 
   vec3 delta(
     diridx == 0,
@@ -172,7 +172,7 @@ void comp_animation() {
   );
 
   delta *= -sign(sidx - 2.5f);
-  delta *= sign(dot(away,delta));
+  delta *= sign(dot(away, delta));
   
   delta = normalize(delta);
   pos += delta * scale * anim.sceneDimension;

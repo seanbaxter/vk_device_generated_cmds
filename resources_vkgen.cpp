@@ -72,22 +72,22 @@ void ResourcesVKGen::initPipes()
   m_gfxGen.createInfo.flags = VK_PIPELINE_CREATE_INDIRECT_BINDABLE_BIT_NV;
   m_gfxGen.clearShaders();
   m_gfxGen.setLayout(m_drawPush.getPipeLayout());
-  m_gfxGen.addShader(m_drawShading[BINDINGMODE_PUSHADDRESS].vertexShaders[0], VK_SHADER_STAGE_VERTEX_BIT);
-  m_gfxGen.addShader(m_drawShading[BINDINGMODE_PUSHADDRESS].fragmentShaders[0], VK_SHADER_STAGE_FRAGMENT_BIT);
+  m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_VERTEX_BIT, shaders.vert[BINDINGMODE_PUSHADDRESS]);
+  m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_FRAGMENT_BIT, shaders.frag[BINDINGMODE_PUSHADDRESS][0]);
 
   for(uint32_t m = 0; m < (useReferences ? 1 : NUM_MATERIAL_SHADERS); m++)
   {
     VkPipelineShaderStageCreateInfo& vstage = shaderStages[m * 2 + 0];
     vstage                                  = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
-    vstage.pName                            = "main";
+    vstage.pName                            = shaders.vert[BINDINGMODE_PUSHADDRESS];
     vstage.stage                            = VK_SHADER_STAGE_VERTEX_BIT;
-    vstage.module                           = m_drawShading[BINDINGMODE_PUSHADDRESS].vertexShaders[m];
+    vstage.module                           = circle_module; 
 
     VkPipelineShaderStageCreateInfo& fstage = shaderStages[m * 2 + 1];
     fstage                                  = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
-    fstage.pName                            = "main";
+    fstage.pName                            = shaders.frag[BINDINGMODE_PUSHADDRESS][m];
     fstage.stage                            = VK_SHADER_STAGE_FRAGMENT_BIT;
-    fstage.module                           = m_drawShading[BINDINGMODE_PUSHADDRESS].fragmentShaders[m];
+    fstage.module                           = circle_module;
 
     VkGraphicsShaderGroupCreateInfoNV group = {VK_STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV};
     group.stageCount                        = 2;

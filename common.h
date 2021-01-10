@@ -77,7 +77,7 @@ struct shaders_t {
 
   const char* comp_animation;
   const char* vert[2];
-  const char* frags[2][128];
+  const char* frag[2][128];
 };
 
 const extern shaders_t shaders;
