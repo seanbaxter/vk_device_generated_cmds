@@ -108,15 +108,11 @@ public:
 
   struct
   {
-    nvvk::ShaderModuleID shaderModuleID;
-    VkShaderModule       shader;
     VkPipeline           pipeline;
   } m_animShading;
 
   struct
   {
-    nvvk::ShaderModuleID vertexIDs[NUM_MATERIAL_SHADERS];
-    nvvk::ShaderModuleID fragmentIDs[NUM_MATERIAL_SHADERS];
     VkPipeline           pipelines[NUM_MATERIAL_SHADERS];
   } m_drawShading[NUM_BINDINGMODES];
 

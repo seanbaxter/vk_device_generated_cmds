@@ -805,8 +805,6 @@ void ResourcesVK::initPipes()
     VkComputePipelineCreateInfo     pipelineInfo = {VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     VkPipelineShaderStageCreateInfo stageInfo    = {VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
     stageInfo.stage                              = VK_SHADER_STAGE_COMPUTE_BIT;
-    // stageInfo.pName                              = "main";
-    // stageInfo.module                             = m_animShading.shader;
     stageInfo.pName                              = shaders.comp_animation;
     stageInfo.module                             = circle_module;
 
