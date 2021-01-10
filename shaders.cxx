@@ -19,12 +19,11 @@ template<typename type_t, int binding, int set = 0>
 [[using spirv: uniform, binding(binding), set(set)]]
 type_t shader_uniform;
 
-struct push_t {
+[[spirv::push]]
+struct {
   MatrixData* matrixData;
   MaterialData* materialData;
-};
-[[spirv::push]]
-push_t push;
+} push;
 
 struct interpolants_t {
   vec3 wPos;
