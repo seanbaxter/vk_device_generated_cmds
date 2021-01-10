@@ -55,7 +55,6 @@ add_definitions(-DCSF_ZIP_SUPPORT=1)
 # Source files for this project
 #
 file(GLOB SOURCE_FILES *.cpp *.hpp *.inl *.h *.c *.cxx)
-file(GLOB GLSL_FILES *.glsl)
 
 #####################################################################################
 # Executable
@@ -69,7 +68,7 @@ else()
   add_definitions(-fpermissive)
 endif()
 
-add_executable(${EXENAME} ${SOURCE_FILES} ${COMMON_SOURCE_FILES} ${PACKAGE_SOURCE_FILES} ${GLSL_FILES})
+add_executable(${EXENAME} ${SOURCE_FILES} ${COMMON_SOURCE_FILES} ${PACKAGE_SOURCE_FILES})
 
 set_source_files_properties(shaders.cxx PROPERTIES COMPILE_FLAGS -shader)
 
@@ -82,9 +81,6 @@ set_source_files_properties(shaders.cxx PROPERTIES COMPILE_FLAGS -shader)
 source_group(common FILES 
   ${COMMON_SOURCE_FILES}
   ${PACKAGE_SOURCE_FILES}
-)
-source_group(shaders FILES 
-  ${GLSL_FILES}
 )
 source_group("Source Files" FILES ${SOURCE_FILES})
 
@@ -112,9 +108,6 @@ endforeach(RELEASELIB)
 
 _copy_binaries_to_target( ${EXENAME} )
 
-LIST(APPEND GLSL_FILES "common.h")
-install(FILES ${GLSL_FILES} CONFIGURATIONS Release DESTINATION "bin_${ARCH}/GLSL_${PROJNAME}")
-install(FILES ${GLSL_FILES} CONFIGURATIONS Debug DESTINATION "bin_${ARCH}_debug/GLSL_${PROJNAME}")
 install(FILES "geforce.csf.gz" CONFIGURATIONS Release DESTINATION "bin_${ARCH}")
 install(FILES "geforce.csf.gz" CONFIGURATIONS Debug DESTINATION "bin_${ARCH}_debug")
 

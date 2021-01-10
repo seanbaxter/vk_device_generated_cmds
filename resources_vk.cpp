@@ -340,48 +340,14 @@ void ResourcesVK::deinit()
 
 bool ResourcesVK::initPrograms(const std::string& path, const std::string& prepend)
 {
-  m_shaderManager.init(m_device);
-  m_shaderManager.m_filetype       = nvh::ShaderFileManager::FILETYPE_GLSL;
-
-  m_shaderManager.addDirectory(path);
-  m_shaderManager.addDirectory(std::string("GLSL_" PROJECT_NAME));
-  m_shaderManager.addDirectory(path + std::string(PROJECT_RELDIRECTORY));
-
-  m_shaderManager.registerInclude("common.h");
-
-  m_shaderManager.m_prepend = prepend;
-
-  ///////////////////////////////////////////////////////////////////////////////////////////
-  for(uint32_t i = 0; i < NUM_BINDINGMODES; i++)
-  {
-    for(uint32_t m = 0; m < NUM_MATERIAL_SHADERS; m++)
-    {
-      std::string defines = std::string("#define WIREMODE 0\n")
-                            + nvh::ShaderFileManager::format("#define SHADER_PERMUTATION %d\n", m)
-                            + nvh::ShaderFileManager::format("#define UNIFORMS_TECHNIQUE %d\n", i);
-
-      m_drawShading[i].vertexIDs[m] = m_shaderManager.createShaderModule(VK_SHADER_STAGE_VERTEX_BIT, "scene.vert.glsl", defines);
-      m_drawShading[i].fragmentIDs[m] =
-          m_shaderManager.createShaderModule(VK_SHADER_STAGE_FRAGMENT_BIT, "scene.frag.glsl", defines);
-    }
-  }
-
-  m_animShading.shaderModuleID = m_shaderManager.createShaderModule(VK_SHADER_STAGE_COMPUTE_BIT, "animation.comp.glsl");
-
   circle_module = nvvk::createShaderModule(
     m_device, 
     (const uint32_t*)shaders.spirv_data, 
     shaders.spirv_size
   );
 
-  bool valid = m_shaderManager.areShaderModulesValid();
-
-  if(valid)
-  {
-    updatedPrograms();
-  }
-
-  return valid;
+  updatedPrograms();
+  return true;
 }
 
 void ResourcesVK::reloadPrograms(const std::string& prepend)
@@ -393,16 +359,6 @@ void ResourcesVK::reloadPrograms(const std::string& prepend)
 
 void ResourcesVK::updatedPrograms()
 {
-  for(uint32_t i = 0; i < NUM_BINDINGMODES; i++)
-  {
-    for(uint32_t m = 0; m < NUM_MATERIAL_SHADERS; m++)
-    {
-      m_drawShading[i].vertexShaders[m]   = m_shaderManager.get(m_drawShading[i].vertexIDs[m]);
-      m_drawShading[i].fragmentShaders[m] = m_shaderManager.get(m_drawShading[i].fragmentIDs[m]);
-    }
-  }
-  m_animShading.shader = m_shaderManager.get(m_animShading.shaderModuleID);
-
   initPipes();
 }
 
@@ -835,9 +791,7 @@ void ResourcesVK::initPipes()
       m_gfxGen.setLayout(i == 0 ? m_drawBind.getPipeLayout() : m_drawPush.getPipeLayout());
 
       m_gfxGen.clearShaders();
-      // m_gfxGen.addShader(m_drawShading[i].vertexShaders[m], VK_SHADER_STAGE_VERTEX_BIT);
       m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_VERTEX_BIT, shaders.vert[i]);
-      // m_gfxGen.addShader(m_drawShading[i].fragmentShaders[m], VK_SHADER_STAGE_FRAGMENT_BIT);
       m_gfxGen.addShader(circle_module, VK_SHADER_STAGE_FRAGMENT_BIT, shaders.frag[i][m]);
 
       m_drawShading[i].pipelines[m] = m_gfxGen.createPipeline();

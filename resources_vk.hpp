@@ -117,8 +117,6 @@ public:
   {
     nvvk::ShaderModuleID vertexIDs[NUM_MATERIAL_SHADERS];
     nvvk::ShaderModuleID fragmentIDs[NUM_MATERIAL_SHADERS];
-    VkShaderModule       vertexShaders[NUM_MATERIAL_SHADERS];
-    VkShaderModule       fragmentShaders[NUM_MATERIAL_SHADERS];
     VkPipeline           pipelines[NUM_MATERIAL_SHADERS];
   } m_drawShading[NUM_BINDINGMODES];
 
